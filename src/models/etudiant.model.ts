@@ -31,3 +31,22 @@ export const create = (nom: string, prenom: string, email: string): Etudiant => 
   nextId++
   return nouvelEtudiant
 }
+
+export const update = (id: number, nom: string, prenom: string, email: string): Etudiant | undefined => {
+  const etudiant = etudiants.find(e => e.id === id)
+  if (!etudiant) return undefined
+
+  etudiant.nom = nom
+  etudiant.prenom = prenom
+  etudiant.email = email
+  return etudiant
+}
+
+export const partialUpdate = (id: number, data: Partial<Omit<Etudiant, 'id'>>): Etudiant | undefined => {
+  const etudiant = etudiants.find(e => e.id === id)
+  if (!etudiant) return undefined
+
+  Object.assign(etudiant, data)
+  return etudiant
+}
+
