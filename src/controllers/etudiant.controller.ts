@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { getAll, getById, create, update, partialUpdate } from '../models/etudiant.model'
+import { getAll, getById, create, update, partialUpdate, remove } from '../models/etudiant.model'
 
 export const getAllEtudiants = (req: Request, res: Response) => {
   const etudiants = getAll()
@@ -54,4 +54,15 @@ export const partialUpdateEtudiant = (req: Request, res: Response) => {
   }
 
   res.status(200).json(etudiant)
+}
+
+export const deleteEtudiant = (req: Request, res: Response) => {
+  const id = Number(req.params.id)
+  const success = remove(id)
+
+  if (!success) {
+    return res.status(404).json({ message: 'Étudiant non trouvé' })
+  }
+
+  res.status(204).send()
 }

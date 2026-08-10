@@ -50,3 +50,10 @@ export const partialUpdate = (id: number, data: Partial<Omit<Etudiant, 'id'>>): 
   return etudiant
 }
 
+export const remove = (id: number): boolean => {
+  const index = etudiants.findIndex(e => e.id === id)
+  if (index === -1) return false
+
+  etudiants.splice(index, 1)
+  return true
+}

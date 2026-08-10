@@ -1,6 +1,10 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import etudiantRoutes from './routes/etudiant.routes'
+import { errorHandler } from './middlewares/errorHandler'
+
+
+
 
 dotenv.config()
 
@@ -17,3 +21,6 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Serveur lancé sur http://localhost:${PORT}`)
 })
+
+
+app.use(errorHandler)
