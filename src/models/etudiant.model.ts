@@ -15,3 +15,19 @@ let nextId = 3
 export const getAll = (): Etudiant[] => {
   return etudiants
 }
+
+export const getById = (id: number): Etudiant | undefined => {
+  return etudiants.find(e => e.id === id)
+}
+
+export const create = (nom: string, prenom: string, email: string): Etudiant => {
+  const nouvelEtudiant: Etudiant = {
+    id: nextId,
+    nom,
+    prenom,
+    email
+  }
+  etudiants.push(nouvelEtudiant)
+  nextId++
+  return nouvelEtudiant
+}
