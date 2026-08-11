@@ -1,59 +1,52 @@
-export interface Etudiant {
-  id: number
-  nom: string
-  prenom: string
-  email: string
+import { pool } from '../config/db'
+import type { Etudiant, EtudiantInput } from '../types/etudiant.types'
+
+export async function findAll(): Promise<Etudiant[]> {
+  const result = await pool.query<Etudiant>(
+    'SELECT * FROM etudiants ORDER BY id ASC'
+  )
+  return result.rows
 }
 
-let etudiants: Etudiant[] = [
-  { id: 1, nom: 'MacTavish', prenom: 'John', email: 'callmesoap.dupont@mail.com' },
-  { id: 2, nom: 'Price', prenom: 'John', email: 'itsprice.martin@mail.com' }
-]
-
-let nextId = 3
-
-export const getAll = (): Etudiant[] => {
-  return etudiants
+export async function findById(id: number): Promise<Etudiant | null> {
+  const result = await pool.query<Etudiant>(
+    'SELECT * FROM etudiants WHERE id = $1',
+    [id]
+  )
+  return result.rows[0] || null
 }
 
-export const getById = (id: number): Etudiant | undefined => {
-  return etudiants.find(e => e.id === id)
+export async function create(etudiant: EtudiantInput): Promise<Etudiant | null> {
+  const result = await pool.query<Etudiant>(
+    'INSERT INTO etudiants (nom, prenom, email) VALUES ($1, $2, $3) RETURNING *',
+    [etudiant.nom, etudiant.prenom, etudiant.email]
+  )
+  return result.rows[0] || null
 }
 
-export const create = (nom: string, prenom: string, email: string): Etudiant => {
-  const nouvelEtudiant: Etudiant = {
-    id: nextId,
-    nom,
-    prenom,
-    email
-  }
-  etudiants.push(nouvelEtudiant)
-  nextId++
-  return nouvelEtudiant
+export async function update(id: number, etudiant: EtudiantInput): Promise<Etudiant | null> {
+  const result = await pool.query<Etudiant>(
+    'UPDATE etudiants SET nom = $1, prenom = $2, email = $3 WHERE id = $4 RETURNING *',
+    [etudiant.nom, etudiant.prenom, etudiant.email, id]
+  )
+  return result.rows[0] || null
 }
 
-export const update = (id: number, nom: string, prenom: string, email: string): Etudiant | undefined => {
-  const etudiant = etudiants.find(e => e.id === id)
-  if (!etudiant) return undefined
+export async function partialUpdate(id: number, data: Partial<EtudiantInput>): Promise<Etudiant | null> {
+  const champs = Object.keys(data)
+  if (champs.length === 0) return findById(id)
 
-  etudiant.nom = nom
-  etudiant.prenom = prenom
-  etudiant.email = email
-  return etudiant
+  const sets = champs.map((champ, i) => `${champ} = $${i + 1}`).join(', ')
+  const valeurs = Object.values(data)
+
+  const result = await pool.query<Etudiant>(
+    `UPDATE etudiants SET ${sets} WHERE id = $${champs.length + 1} RETURNING *`,
+    [...valeurs, id]
+  )
+  return result.rows[0] || null
 }
 
-export const partialUpdate = (id: number, data: Partial<Omit<Etudiant, 'id'>>): Etudiant | undefined => {
-  const etudiant = etudiants.find(e => e.id === id)
-  if (!etudiant) return undefined
-
-  Object.assign(etudiant, data)
-  return etudiant
-}
-
-export const remove = (id: number): boolean => {
-  const index = etudiants.findIndex(e => e.id === id)
-  if (index === -1) return false
-
-  etudiants.splice(index, 1)
-  return true
+export async function remove(id: number): Promise<boolean> {
+  const result = await pool.query('DELETE FROM etudiants WHERE id = $1', [id])
+  return (result.rowCount ?? 0) > 0
 }
