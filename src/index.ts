@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import studentRoutes from './routes/student.routes'
 import { errorHandler } from './middlewares/errorHandler'
+import authRoutes from './routes/auth.routes'
 
 dotenv.config()
 
@@ -20,3 +21,5 @@ app.use(errorHandler)
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)
 })
+
+app.use('/auth', authRoutes)

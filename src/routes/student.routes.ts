@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { authenticate } from '../middlewares/auth.middleware'
 import {
   getAllStudents,
   getStudentById,
@@ -9,6 +10,8 @@ import {
 } from '../controllers/student.controller'
 
 const router = Router()
+
+router.use(authenticate)
 
 router.get('/', getAllStudents)
 router.get('/:id', getStudentById)
