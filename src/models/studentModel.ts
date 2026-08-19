@@ -1,5 +1,5 @@
 import { pool } from '../config/db'
-import type { Student, StudentInput } from '../types/student.types'
+import type { Student, StudentInput } from '../types/studentTypes'
 
 export async function findAll(): Promise<Student[]> {
   const result = await pool.query<Student>(

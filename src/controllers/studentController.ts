@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { ApiError } from '../utils/ApiError'
-import { findAll, findById, create, update, partialUpdate, remove } from '../models/student.model'
+import { findAll, findById, create, update, partialUpdate, remove } from '../models/studentModel'
 
 export const getAllStudents = async (req: Request, res: Response, next: NextFunction) => {
   try {

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { authenticate } from '../middlewares/auth.middleware'
+import { authenticate } from '../middlewares/authMiddleware'
 import {
   getAllStudents,
   getStudentById,
@@ -7,7 +7,7 @@ import {
   updateStudent,
   partialUpdateStudent,
   deleteStudent
-} from '../controllers/student.controller'
+} from '../controllers/studentController'
 
 const router = Router()
 
