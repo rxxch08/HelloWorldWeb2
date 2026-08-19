@@ -11,7 +11,7 @@ export const getAllStudents = async (req: Request, res: Response, next: NextFunc
   }
 }
 
-export const getStudentById = async (req: Request, res: Response, next: NextFunction) => {
+export const getStudentById =g async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = Number(req.params.id)
     const student = await findById(id)
