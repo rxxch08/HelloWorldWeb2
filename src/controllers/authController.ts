@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { ApiError } from '../utils/ApiError'
-import { findByEmail, create } from '../models/user.model'
+import { findByEmail, create } from '../models/userModel'
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
